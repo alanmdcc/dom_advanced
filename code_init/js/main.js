@@ -37,39 +37,40 @@ function calcAll(){
         };//for
 
         //Imprime en el DOM el precio total
-        totalElement.textContent = total;
-        
+        totalElement.textContent = total.toFixed(2);
 
     });
     
 };//calcAll
 
-//Add a listener to Delete buttons to remove the row where it is clicked
+//Add a listener to the table body to catch all the clicks on the delete buttons
 function removeButton(){
-    let rmBtns = document.getElementsByClassName("btn-delete");//Get all the Delete buttons
-    console.log(rmBtns);
+    let body = document.getElementById("table-body");//Get the body element
 
-    for (let btn of rmBtns){
-        btn.addEventListener("click", function(e){
-            //Removes the row where the remove button is clicked
-            e.currentTarget.parentNode.parentNode.parentNode.removeChild(e.currentTarget.parentNode.parentNode);
-            console.log(rmBtns);
-        })//addEventListener
-    }; //for Add a listener to all remove buttons
+    body.addEventListener("click", function(e){
 
+        if(e.target && e.target.nodeName == "BUTTON"){ //Verify that the click is from a button
+            e.target.parentNode.parentNode.parentNode.removeChild(e.target.parentNode.parentNode); //Remove the row
+        };
+
+    });//addEventListener
+           
 };//removeButton
 
+//Creates a new row with the product name and price given by the client
 function createProduct(){
-    let createBtn = document.getElementById("create");
+    let createBtn = document.getElementById("create"); //Get the button Create
 
     createBtn.addEventListener("click",function(){
+        //Get the input elements for name and price
         let nameElement = document.getElementById("create-name");
         let priceElement = document.getElementById("create-price");
 
+        //Get the value of the inputs
         let name = nameElement.value;
         let price = priceElement.value;
 
-
+        //Creates the string for the new product in HTML
         newProductString=`
             <tr class="product">
               <td class="name">
@@ -77,7 +78,7 @@ function createProduct(){
             </td>
         
             <td class="pu">
-              $<span>${price}</span>
+              $<span>${parseFloat(price).toFixed(2)}</span>
             </td>
         
             <td class="qty">
@@ -95,29 +96,21 @@ function createProduct(){
             </td>
         </tr>
         `
-
+        //Add the new element to the HTML
         let body = document.getElementById("table-body");
         body.innerHTML += newProductString;
 
+        //Reset the values in the inputs
         nameElement.value = "";
         priceElement.value = "";
 
-        let rmBtns = document.getElementsByClassName("btn-delete");//Get all the Delete buttons
-        console.log(rmBtns);
-
     })
-
-    
-
-
-
-
 };//createProduct
 
-calcAll();
 
-removeButton();
+calcAll(); //Button to calculate subtotal and total
 
-createProduct()
+removeButton(); //Button to remove products
 
-removeButton();
+createProduct(); //Button to create new products
+
